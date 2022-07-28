@@ -1,0 +1,87 @@
+# Default values for python-listen-storage-queue.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: crovp.azurecr.io/python-listen-storage-queue
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "c9aa3a4e85a31348794fd66b9360b10d25931b6d"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 16
+    memory: 64Gi
+  requests:
+    cpu: 16
+    memory: 64Gi
+
+autoscaling:
+  enabled: false
+
+kedascaler:
+  minReplicaCount: 0
+  maxReplicaCount: 2
+  cooldownPeriod: 60
+  pollingInterval: 30
+  #accountName: sttestlf4db6c1d6
+  queueName: azureStorageQueueName
+  queueLength: "5"
+  connectionFromEnv: azureStorageConnectionString
+
+nodeSelector:
+  vmsize: d16asv5
+
+selectorLabels:
+  vmsize: d16asv5
+
+tolerations:
+- key: "kubernetes.azure.com/scalesetpriority"
+  operator: "Equal"
+  value: "spot"
+  effect: "NoSchedule"
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: In
+          values:
+          - "spot"
