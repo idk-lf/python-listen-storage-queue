@@ -42,19 +42,6 @@ service:
 
 ingress:
   enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
 
 resources:
   limits:
@@ -66,40 +53,35 @@ resources:
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+
+kedascaler:
+  minReplicaCount: 0
+  maxReplicaCount: 2
+  cooldownPeriod: 60
+  pollingInterval: 30
+  #accountName: sttestlf4db6c1d6
+  queueName: azureStorageQueueName
+  queueLength: "5"
+  connectionFromEnv: azureStorageConnectionString
 
 nodeSelector:
   vmsize: d16asv5
 
-tolerations: []
+selectorLabels:
+  vmsize: d16asv5
 
-affinity: {}
+tolerations:
+- key: "kubernetes.azure.com/scalesetpriority"
+  operator: "Equal"
+  value: "spot"
+  effect: "NoSchedule"
 
-metadata:
-  labels:
-    vmsize: d16asv5
-spec:
-  selector:
-    matchLabels:
-      vmsize: d16asv5
-  template:
-    metadata:
-      labels:
-        vmsize: d16asv5
-  tolerations:
-  - key: "kubernetes.azure.com/scalesetpriority"
-    operator: "Equal"
-    value: "spot"
-    effect: "NoSchedule"
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: "kubernetes.azure.com/scalesetpriority"
-            operator: In
-            values:
-            - "spot"
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: In
+          values:
+          - "spot"
