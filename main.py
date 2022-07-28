@@ -5,6 +5,8 @@ import os, time
 import _thread
 from flask import Flask
 
+print("start")
+
 def process():
         connect_str = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
         queue_name = os.getenv("AZURE_STORAGE_QUEUE_NAME")
