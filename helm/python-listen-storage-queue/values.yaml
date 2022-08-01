@@ -64,11 +64,11 @@ kedascaler:
   queueLength: "5"
   connectionFromEnv: azureStorageConnectionString
 
-nodeSelector:
-  vmsize: d16asv5
+# nodeSelector:
+#   vmsize: d16asv5
 
-selectorLabels:
-  vmsize: d16asv5
+# selectorLabels:
+#   vmsize: d16asv5
 
 tolerations:
 - key: "kubernetes.azure.com/scalesetpriority"
