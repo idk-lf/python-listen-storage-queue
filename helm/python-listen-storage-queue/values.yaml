@@ -59,10 +59,9 @@ kedascaler:
   maxReplicaCount: 2
   cooldownPeriod: 60
   pollingInterval: 30
-  #accountName: sttestlf4db6c1d6
-  queueName: azureStorageQueueName
+  queueName: "jobs"
   queueLength: "5"
-  connectionFromEnv: azureStorageConnectionString
+  connectionFromEnv: "AZURE_STORAGE_CONNECTION_STRING"
 
 # nodeSelector:
 #   vmsize: d16asv5
